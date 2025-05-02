@@ -2,16 +2,16 @@ const output = document.getElementById("output");
 const form = document.getElementById("gameForm");
 const inputField = document.getElementById("userInput");
 
-let room = 500;
+let room = 11010;
 let inventory = [];
 
 const rooms = {
-  500: ["forward", "left"],
-  499: ["right", "left"],
-  550: ["forward", "back", "sword"],
-  600: ["back"],
-  549: ["left"],
-  551: ["right"]
+  10910: ["forward", "left"],
+  10909: ["right", "left"],
+  11010: ["forward", "back", "sword"],
+  11110: ["back"],
+  11009: ["left"],
+  11110: ["right"]
 };
 
 function print(text) {
@@ -20,9 +20,9 @@ function print(text) {
 }
 
 function enterRoom(roomNumber) {
-  if (roomNumber === 500) {
+  if (roomNumber === 11009) {
     print("You are back in the ruined dungeon where your journey began.");
-  } else if (roomNumber === 550) {
+  } else if (roomNumber === 11010) {
     print("A narrow hall leads to an old torture room, cold and silent.");
   }
 
@@ -47,14 +47,14 @@ function handleCommand(command) {
     print(rooms[room].includes("forward") ? "true" : "false");
   } else if (userInput === "go forward" || userInput === "go") {
     if (rooms[room].includes("forward")) {
-      room += 50;
+      room += 100;
       enterRoom(room);
     } else {
       print("There's nowhere to go forward.");
     }
   } else if (userInput === "go back" || userInput === "back") {
     if (rooms[room].includes("back")) {
-      room -= 50;
+      room -= 100;
       enterRoom(room);
     } else {
       print("There's nowhere to go back.");
