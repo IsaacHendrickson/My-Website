@@ -6,24 +6,31 @@ let room = 11010;
 let inventory = [];
 
 const rooms = {
-  10910: ["forward", "left"],
-  10909: ["right", "left"],
-  11010: ["forward", "back", "sword"],
-  11110: ["back"],
-  11009: ["left"],
-  11110: ["right"]
+  //start room
+  11010: ["forward", "left"],
+  //one forward
+  11110: ["forward", "back", "sword"],
+  //two forward
+  11210: ["back"],
+  //one left
+  11009: ["right"]
 };
 
 function print(text) {
-  output.innerText += text + "\n";
-  output.scrollTop = output.scrollHeight;
+  // Append the text to the output box
+  output.innerHTML += text + "<br>"; // Use <br> for line breaks
+  output.scrollTop = output.scrollHeight; // Ensure the output box scrolls to the bottom
 }
 
 function enterRoom(roomNumber) {
-  if (roomNumber === 11009) {
-    print("You are back in the ruined dungeon where your journey began.");
-  } else if (roomNumber === 11010) {
-    print("A narrow hall leads to an old torture room, cold and silent.");
+  print(roomNumber);
+  if (roomNumber === 11010) {
+    print("You are back in the clearing where your journey began.");
+  } else if (roomNumber === 11110) {
+    print("You see a small house in front of you");
+  }
+  else if (roomNumber === 11009) {
+    print("You see the rements of an old strucure");
   }
 
   for (let item of rooms[roomNumber]) {
@@ -45,6 +52,7 @@ function handleCommand(command) {
 
   if (userInput === "check") {
     print(rooms[room].includes("forward") ? "true" : "false");
+//movement
   } else if (userInput === "go forward" || userInput === "go") {
     if (rooms[room].includes("forward")) {
       room += 100;
@@ -73,6 +81,7 @@ function handleCommand(command) {
     } else {
       print("There's nowhere to go right.");
     }
+//picking up items
   } else if (userInput.startsWith("grab") && userInput.endsWith("sword")) {
     if (rooms[room].includes("sword")) {
       print("You reach out and grab it. Yoink!");
@@ -80,11 +89,12 @@ function handleCommand(command) {
       rooms[room] = rooms[room].filter(item => item !== "sword");
       print("Inventory: " + inventory.join(", "));
     }
-  } else {
-    print("I don't understand that command.");
+  } else if (userInput === "look"){
+    enterRoom(room)
   }
+    
+  print("\n");
 }
-
 form.addEventListener("submit", function (e) {
   e.preventDefault();
   const command = inputField.value;
@@ -94,5 +104,5 @@ form.addEventListener("submit", function (e) {
 });
 
 // Initial description
-print("You stand on the cold stone floor of a ruined dungeon...");
+print("You stand in a clearing, ahead through the forest you can see a house");
 enterRoom(room);
