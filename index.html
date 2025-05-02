@@ -2,148 +2,18 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Clicker Game!</title>
-  <style>
-    body {
-      margin: 0;
-      font-family: 'Arial', sans-serif;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      height: 100vh;
-      background: linear-gradient(135deg, #74ebd5 0%, #acb6e5 100%);
-      overflow: hidden;
-    }
-    h1 {
-      color: white;
-      font-size: 3em;
-      margin-bottom: 20px;
-      text-shadow: 2px 2px 4px #000;
-    }
-    #start-btn, #click-btn {
-      padding: 15px 30px;
-      font-size: 1.5em;
-      border: none;
-      border-radius: 10px;
-      background: #ff7e5f;
-      color: white;
-      cursor: pointer;
-      transition: transform 0.2s, background 0.3s;
-      box-shadow: 0 4px 8px rgba(0,0,0,0.3);
-    }
-    #start-btn:hover, #click-btn:hover {
-      transform: scale(1.1);
-      background: #feb47b;
-    }
-    #score {
-      margin-top: 20px;
-      font-size: 2em;
-      color: white;
-    }
-    .hidden {
-      display: none;
-    }
-    #fireworks {
-      position: absolute;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      pointer-events: none;
-      z-index: 10;
-    }
-  </style>
+  <title>Dungeon Game</title>
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
-
-  <h1>🔥 Clicker Challenge 🔥</h1>
-  <button id="start-btn">Start Game</button>
-
-  <div id="game" class="hidden">
-    <button id="click-btn">Click Me!</button>
-    <div id="score">Score: 0</div>
+  <div class="container">
+    <h1>Text Dungeon</h1>
+    <div id="output" class="output-box"></div>
+    <form id="gameForm">
+      <input type="text" id="userInput" placeholder="Enter a command..." autocomplete="off" />
+      <button type="submit">Enter</button>
+    </form>
   </div>
-
-  <canvas id="fireworks"></canvas>
-
-  <script>
-    const startBtn = document.getElementById('start-btn');
-    const gameDiv = document.getElementById('game');
-    const clickBtn = document.getElementById('click-btn');
-    const scoreDiv = document.getElementById('score');
-    const canvas = document.getElementById('fireworks');
-    const ctx = canvas.getContext('2d');
-
-    let score = 0;
-
-    startBtn.addEventListener('click', () => {
-      startBtn.classList.add('hidden');
-      gameDiv.classList.remove('hidden');
-      score = 0;
-      scoreDiv.textContent = "Score: " + score;
-      resizeCanvas();
-      animateFireworks();
-    });
-
-    clickBtn.addEventListener('click', () => {
-      score++;
-      scoreDiv.textContent = "Score: " + score;
-      popEffect();
-    });
-
-    function popEffect() {
-      clickBtn.style.transform = "scale(1.2)";
-      setTimeout(() => clickBtn.style.transform = "scale(1)", 100);
-    }
-
-    function resizeCanvas() {
-      canvas.width = window.innerWidth;
-      canvas.height = window.innerHeight;
-    }
-
-    window.addEventListener('resize', resizeCanvas);
-
-    // Simple fireworks animation
-    let particles = [];
-
-    function animateFireworks() {
-      setInterval(() => {
-        let x = Math.random() * canvas.width;
-        let y = Math.random() * canvas.height;
-        let color = 'hsl(' + Math.random() * 360 + ', 100%, 60%)';
-        for (let i = 0; i < 10; i++) {
-          particles.push({
-            x: x,
-            y: y,
-            dx: (Math.random() - 0.5) * 6,
-            dy: (Math.random() - 0.5) * 6,
-            life: 50,
-            color: color
-          });
-        }
-      }, 500);
-
-      function draw() {
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
-        particles.forEach((p, i) => {
-          ctx.beginPath();
-          ctx.arc(p.x, p.y, 3, 0, Math.PI * 2);
-          ctx.fillStyle = p.color;
-          ctx.fill();
-          p.x += p.dx;
-          p.y += p.dy;
-          p.life--;
-          if (p.life <= 0) {
-            particles.splice(i, 1);
-          }
-        });
-        requestAnimationFrame(draw);
-      }
-      draw();
-    }
-  </script>
-
+  <script src="script.js"></script>
 </body>
 </html>

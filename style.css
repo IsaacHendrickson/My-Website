@@ -1,0 +1,43 @@
+body {
+  font-family: monospace;
+  background-color: #111;
+  color: #eee;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+
+.container {
+  width: 600px;
+  padding: 20px;
+  background-color: #222;
+  border-radius: 10px;
+  box-shadow: 0 0 20px #000;
+}
+
+.output-box {
+  height: 300px;
+  overflow-y: auto;
+  background-color: #000;
+  padding: 10px;
+  border: 1px solid #444;
+  margin-bottom: 10px;
+  white-space: pre-line;
+}
+
+input[type="text"] {
+  width: 75%;
+  padding: 10px;
+  border: none;
+  border-radius: 5px;
+}
+
+button {
+  padding: 10px;
+  margin-left: 5px;
+  background-color: #444;
+  color: white;
+  border: none;
+  border-radius: 5px;
+}
