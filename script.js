@@ -8,6 +8,8 @@ let health = 10;
 let coins = 0;
 let ac = 10;
 
+let deepLook = false;
+
 let room = 155;
 let temp = "";
 
@@ -16,7 +18,15 @@ const rooms = {
   155: {
     description: "You are in the clearing where your journey began.",
     exits: ["forward", "left"],
-    items: ["coin"]
+    items: ["coin"],
+    hidden: {
+      description: [" There seems to be an old path behind you, though it's so overgrown you would need somthing sharp to cut the vines away"],
+      item: []
+    }
+  },
+  145: {
+    description: ["You see an old overgrown well"],
+    exits: ["forward"]
   },
   165: {
     description: "You walk down the path and walk up to the old house.",
@@ -26,7 +36,10 @@ const rooms = {
   175: {
     description: "You enter the house, it is old and appears abandoned.",
     exits: ["back", "topStairs"],
-    items: []
+    items: [],
+    hidden: {
+      item: ["coin"]
+    }
   },
   154: {
     description: "You see the remnants of an old structure.",
@@ -48,9 +61,9 @@ const rooms = {
 
 const enemyStats = {
   rat: {
-    hp: 5,
+    hp: 50,
     resethp: 5,
-    ac: 10,
+    ac: 20,
     hitPlus: 2,
     damage: [1, 2],
     attackDescriptions: {
@@ -158,6 +171,9 @@ function enterRoom(roomNumber) {
   const currentRoom = rooms[room];
   print(roomNumber)
   print(currentRoom.description);
+  if(deepLook === true && rooms[room].hidden && rooms[room].hidden.description.length > 0){
+    print(currentRoom.hidden.description);
+  }
   print(" ");
 
   for (let exit of currentRoom.exits) {
@@ -267,7 +283,9 @@ else if (userInput.startsWith("grab")) {
     }
 // look
   } else if (userInput === "look"){
+    deepLook = true;
     enterRoom(room);
+    deepLook = false;
 //attacking
 }else if(userInput.startsWith("attack")){
   const currentRoom = rooms[room];
@@ -276,11 +294,15 @@ else if (userInput.startsWith("grab")) {
   print (enemyInput+ " enemtonfie")
   const enemyList = currentRoom.enemies || [];
   const enemy = enemyList.find(e => e.toLowerCase() === enemyInput.toLowerCase());
-
+  if (checkArray(inventory, "sword")){
+    rooms[155].exits.push("back");
+    print("Using your sword you cut through the vines blocking your path")
+  }
   if (enemy) {
     if (holding === "sword") {
       enemyStats[enemy].hp -= 5;
       print(enemyStats[enemy].hp + " enemy hp");
+
     } else {
       print("You're not holding a weapon.");
     }
