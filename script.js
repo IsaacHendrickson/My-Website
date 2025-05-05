@@ -26,6 +26,7 @@ const rooms = {
   },
   145: {
     description: ["You see an old overgrown well"],
+    items: [],
     exits: ["forward"]
   },
   165: {
@@ -161,6 +162,21 @@ function enemyTurn() {
   }
 }
 
+function extraEvents(event, variable){
+  if(event === "attack"){
+    if (checkArray(inventory, "sword") && room === 155){
+      rooms[155].exits.push("back");
+      print("Using your sword you cut through the vines blocking your path")
+    }
+  }else if(event === "drop"){
+    if(room === 145 && variable === "coin"){
+      print("You drop the coin into the well")
+      delete rooms[145].items["coin"];
+      rooms[145].items.push("crystal");
+    }
+  }
+}
+
 function randomNumber(min, max){
   return Math.floor(Math.random()*max)+min;
 }
@@ -189,6 +205,7 @@ function enterRoom(roomNumber) {
     for (let item of currentRoom.items) {
       if (item === "sword") print("You see a sword driven point-first into the ground.");
       else if (item === "coin") print("You see a small golden coin");
+      else if (item === "crystal") print("You see a mysterious crystal");
     }
   }
 
@@ -274,6 +291,18 @@ else if (userInput.startsWith("grab")) {
   } else {
     print("You can't grab that.");
   }
+// droping items
+}else if (userInput.startsWith("drop")){
+  let dropItem = userInput.split(" ")[1];
+  print(dropItem);
+  if(checkArray(inventory, dropItem)){
+    rooms[room].items.push(dropItem);
+    const index = inventory.indexOf(dropItem);
+    inventory.splice(index,1);
+    extraEvents("drop",dropItem);
+  }
+
+
 //holding items
   } else if (userInput.startsWith("use")){
     print("use found")
@@ -294,10 +323,7 @@ else if (userInput.startsWith("grab")) {
   print (enemyInput+ " enemtonfie")
   const enemyList = currentRoom.enemies || [];
   const enemy = enemyList.find(e => e.toLowerCase() === enemyInput.toLowerCase());
-  if (checkArray(inventory, "sword")){
-    rooms[155].exits.push("back");
-    print("Using your sword you cut through the vines blocking your path")
-  }
+  extraEvents("attack","");
   if (enemy) {
     if (holding === "sword") {
       enemyStats[enemy].hp -= 5;
@@ -306,7 +332,7 @@ else if (userInput.startsWith("grab")) {
     } else {
       print("You're not holding a weapon.");
     }
-  } else {
+  } else if(enemyInput != "") {
     print("There's no such enemy here.");
   }
 
